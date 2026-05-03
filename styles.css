@@ -609,6 +609,7 @@ main#app {
 .test-gate::before {
   content: ""; position: absolute; inset: 8px;
   border: 0.5px solid var(--paper-rule);
+  pointer-events: none;
 }
 .gate-list {
   list-style: none; margin: 0 0 32px; padding: 0;
