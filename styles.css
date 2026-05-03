@@ -614,14 +614,16 @@ main#app {
   list-style: none; margin: 0 0 32px; padding: 0;
 }
 .gate-list li {
-  display: grid;
-  grid-template-columns: 32px 1fr;
+  display: flex;
   align-items: baseline;
-  gap: 12px;
+  gap: 14px;
   padding: 14px 0;
   border-top: var(--hair);
   font-family: var(--serif);
   font-size: 17px;
+}
+.gate-list li > .mono {
+  flex: 0 0 32px;
 }
 .gate-list li:last-child { border-bottom: var(--hair); }
 .gate-list .mono { color: var(--ink-faint); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }

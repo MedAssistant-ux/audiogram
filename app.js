@@ -299,18 +299,18 @@ function computePTA(thresholds) {
 /* ---------- Test runner ---------- */
 const Test = {
   async run({ mode = 'full' } = {}) {
-    if (!state.cal) {
-      modal.open(`
-        <h3>Calibration required</h3>
-        <p>Before testing we need a reference level. The calibration takes about a minute and only needs to be repeated when you change headphones.</p>
-        <div class="modal-actions">
-          <button class="btn btn-primary" onclick="window.__app.calibrate()">Calibrate now</button>
-          <button class="btn btn-ghost" data-modal-close>Later</button>
-        </div>
-      `);
-      return;
-    }
     await Audio.resume();
+    if (!state.cal) {
+      /* No calibration yet — fall back to default reference and warn. */
+      state.cal = {
+        gain: REFERENCE_GAIN,
+        trim: 0,
+        ts: Date.now(),
+        channelsConfirmed: false,
+        provisional: true,
+      };
+      toast('Using default reference. Calibrate for better accuracy.', 3500);
+    }
 
     const freqs = mode === 'quick' ? FREQS_QUICK : FREQS_FULL;
     const ears  = ['right', 'left'];
@@ -1346,6 +1346,7 @@ function wire() {
   $('#btn-gate-start').addEventListener('click', async () => {
     await Audio.resume();
     if (!state.test) await Test.run({ mode: 'full' });
+    if (!state.test) return; /* Test.run aborted (e.g. modal shown) */
     $('#test-gate').style.display = 'none';
     $('#test-stage').classList.add('active');
     Test.begin();
