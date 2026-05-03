@@ -625,6 +625,8 @@ main#app {
 .gate-list li > .mono {
   flex: 0 0 32px;
 }
+.gate-list .gate-text { flex: 1; }
+.gate-list .gate-text em { font-style: italic; color: var(--ink-soft); }
 .gate-list li:last-child { border-bottom: var(--hair); }
 .gate-list .mono { color: var(--ink-faint); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
 .gate-actions { display: flex; gap: 12px; }

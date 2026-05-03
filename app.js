@@ -133,7 +133,8 @@ const Audio = {
   },
 
   resume() {
-    if (this.ctx && this.ctx.state === 'suspended') return this.ctx.resume();
+    this.ensure();
+    if (this.ctx.state === 'suspended') return this.ctx.resume();
     return Promise.resolve();
   },
 
@@ -1343,12 +1344,25 @@ function wire() {
   window.__app.calibrate = () => { modal.close(); Router.go('calibrate'); };
 
   /* gate button */
-  $('#btn-gate-start').addEventListener('click', async () => {
-    await Audio.resume();
-    if (!state.test) await Test.run({ mode: 'full' });
-    if (!state.test) return; /* Test.run aborted (e.g. modal shown) */
+  $('#btn-gate-start').addEventListener('click', async (e) => {
+    e.preventDefault();
+    console.log('[audiometry] start-test clicked');
+    /* Visible feedback first — independent of any async work */
     $('#test-gate').style.display = 'none';
     $('#test-stage').classList.add('active');
+    /* Ensure audio context inside the user gesture */
+    try { await Audio.resume(); } catch (err) { console.warn('audio resume', err); }
+    /* Set up test if not already set up via the home-page entry */
+    if (!state.test) {
+      await Test.run({ mode: 'full' });
+      /* Test.run repaints the gate; counter-act since user already clicked Start */
+      $('#test-gate').style.display = 'none';
+      $('#test-stage').classList.add('active');
+    }
+    if (!state.test) {
+      console.warn('[audiometry] no test state; aborting');
+      return;
+    }
     Test.begin();
   });
   $('#btn-hear').addEventListener('click', () => Test.reportResponse());
