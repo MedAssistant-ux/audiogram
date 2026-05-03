@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <pattern id="dots" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="0.7" fill="#15140f" opacity="0.06"/>
+    </pattern>
+    <linearGradient id="vignette" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f3ede1" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#d8cfb9" stop-opacity="0.35"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#f3ede1"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+  <rect width="1200" height="630" fill="url(#vignette)"/>
+
+  <!-- top rule with audiology accents -->
+  <g>
+    <line x1="64" y1="64" x2="1136" y2="64" stroke="#15140f" stroke-width="0.8"/>
+    <text x="64" y="50" font-family="JetBrains Mono, monospace" font-size="14" letter-spacing="3" fill="#3a372d">AUDIOMETRY · NO. 01</text>
+    <text x="1136" y="50" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="14" letter-spacing="3" fill="#8a836f">AT-HOME HEARING TEST</text>
+  </g>
+
+  <!-- waveform mark -->
+  <g transform="translate(64, 110)" stroke-linecap="round" fill="none">
+    <path d="M0 30 Q 12 0, 24 30 T 48 30 T 72 30 T 96 30" stroke="#15140f" stroke-width="3"/>
+  </g>
+
+  <!-- headline -->
+  <g font-family="Fraunces, Georgia, serif" fill="#15140f">
+    <text x="64" y="290" font-size="148" font-weight="320" letter-spacing="-4">Listen</text>
+    <text x="380" y="290" font-size="148" font-weight="320" font-style="italic" fill="#3a372d" letter-spacing="-2">carefully.</text>
+  </g>
+
+  <!-- subhead -->
+  <text x="64" y="350" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="30" fill="#3a372d">A free at-home audiogram for the hearing-curious.</text>
+
+  <!-- mini audiogram graphic on the right -->
+  <g transform="translate(760, 380)">
+    <!-- frame -->
+    <rect x="0" y="0" width="360" height="180" fill="#ebe3d2" stroke="#d8cfb9"/>
+    <!-- severity stripes -->
+    <rect x="0" y="0"  width="360" height="36" fill="#cfe1c2" opacity="0.45"/>
+    <rect x="0" y="36" width="360" height="36" fill="#e8d8a3" opacity="0.45"/>
+    <rect x="0" y="72" width="360" height="36" fill="#ebbf86" opacity="0.45"/>
+    <rect x="0" y="108" width="360" height="36" fill="#db9b6f" opacity="0.45"/>
+    <rect x="0" y="144" width="360" height="36" fill="#b0734d" opacity="0.45"/>
+    <!-- gridlines -->
+    <g stroke="#3a372d" stroke-width="0.4" opacity="0.35">
+      <line x1="60"  y1="0" x2="60"  y2="180"/>
+      <line x1="120" y1="0" x2="120" y2="180"/>
+      <line x1="180" y1="0" x2="180" y2="180"/>
+      <line x1="240" y1="0" x2="240" y2="180"/>
+      <line x1="300" y1="0" x2="300" y2="180"/>
+    </g>
+    <!-- right-ear (red) line + circles -->
+    <polyline points="30,30 90,28 150,32 210,40 270,55 330,75" fill="none" stroke="#b9302a" stroke-width="2"/>
+    <g fill="none" stroke="#b9302a" stroke-width="2">
+      <circle cx="30"  cy="30" r="6"/><circle cx="90"  cy="28" r="6"/>
+      <circle cx="150" cy="32" r="6"/><circle cx="210" cy="40" r="6"/>
+      <circle cx="270" cy="55" r="6"/><circle cx="330" cy="75" r="6"/>
+    </g>
+    <!-- left-ear (blue) line + crosses -->
+    <polyline points="30,34 90,33 150,38 210,55 270,82 330,110" fill="none" stroke="#1c3666" stroke-width="2"/>
+    <g stroke="#1c3666" stroke-width="2">
+      <g transform="translate(30,34)"><line x1="-6" y1="-6" x2="6" y2="6"/><line x1="6" y1="-6" x2="-6" y2="6"/></g>
+      <g transform="translate(90,33)"><line x1="-6" y1="-6" x2="6" y2="6"/><line x1="6" y1="-6" x2="-6" y2="6"/></g>
+      <g transform="translate(150,38)"><line x1="-6" y1="-6" x2="6" y2="6"/><line x1="6" y1="-6" x2="-6" y2="6"/></g>
+      <g transform="translate(210,55)"><line x1="-6" y1="-6" x2="6" y2="6"/><line x1="6" y1="-6" x2="-6" y2="6"/></g>
+      <g transform="translate(270,82)"><line x1="-6" y1="-6" x2="6" y2="6"/><line x1="6" y1="-6" x2="-6" y2="6"/></g>
+      <g transform="translate(330,110)"><line x1="-6" y1="-6" x2="6" y2="6"/><line x1="6" y1="-6" x2="-6" y2="6"/></g>
+    </g>
+    <text x="0" y="-10" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="2" fill="#8a836f">SAMPLE AUDIOGRAM · dB HL × Hz</text>
+  </g>
+
+  <!-- feature pills -->
+  <g font-family="JetBrains Mono, monospace" font-size="13" letter-spacing="2" fill="#3a372d">
+    <text x="64" y="430">PURE-TONE THRESHOLD · 250 Hz–8 kHz</text>
+    <text x="64" y="465">TINNITUS MATCHER</text>
+    <text x="64" y="500">AMBIENT NOISE METER</text>
+    <text x="64" y="535">LONGITUDINAL TRACKING</text>
+  </g>
+
+  <!-- footer -->
+  <g>
+    <line x1="64" y1="566" x2="1136" y2="566" stroke="#15140f" stroke-width="0.8"/>
+    <text x="64" y="590" font-family="JetBrains Mono, monospace" font-size="14" letter-spacing="3" fill="#3a372d">PRIVATE · IN-BROWSER · NO ACCOUNT</text>
+    <text x="1136" y="590" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="14" letter-spacing="3" fill="#3a372d">medassistant-ux.github.io/audiogram</text>
+  </g>
+</svg>

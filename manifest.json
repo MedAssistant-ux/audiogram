@@ -1,0 +1,27 @@
+{
+  "name": "Audiometry — At-home Hearing Test",
+  "short_name": "Audiometry",
+  "description": "A free, private at-home hearing test. Pure-tone audiogram, tinnitus matcher, and noise meter — runs in your browser.",
+  "start_url": "/audiogram/",
+  "scope": "/audiogram/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f3ede1",
+  "theme_color": "#15140f",
+  "lang": "en",
+  "categories": ["health", "medical", "utilities"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23f3ede1'/%3E%3Cpath d='M10 96 Q 34 50, 60 96 T 108 96 T 156 96 T 182 96' stroke='%2315140f' stroke-width='10' fill='none' stroke-linecap='round'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23f3ede1'/%3E%3Cpath d='M30 256 Q 90 130, 160 256 T 290 256 T 420 256 T 482 256' stroke='%2315140f' stroke-width='24' fill='none' stroke-linecap='round'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

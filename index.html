@@ -3,14 +3,161 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Audiometry — At-home hearing assessment</title>
+
+<!-- ============ PRIMARY SEO ============ -->
+<title>Free Online Hearing Test &amp; Audiogram — Audiometry</title>
+<meta name="description" content="A free, private at-home hearing test. Pure-tone audiogram from 250 Hz to 8 kHz, tinnitus frequency matcher, ambient noise meter, and longitudinal tracking. Runs in your browser — no account, no data leaves your device." />
+<meta name="keywords" content="hearing test, online hearing test, at-home hearing test, audiogram, pure tone audiometry, tinnitus test, tinnitus matcher, hearing screening, dB HL, hearing loss, sound level meter, hearing health" />
+<meta name="author" content="Audiometry" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="theme-color" content="#15140f" />
+<meta name="color-scheme" content="light" />
+<link rel="canonical" href="https://medassistant-ux.github.io/audiogram/" />
+
+<!-- ============ OPEN GRAPH (Facebook, LinkedIn, iMessage) ============ -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://medassistant-ux.github.io/audiogram/" />
+<meta property="og:title" content="Free Online Hearing Test &amp; Audiogram — Audiometry" />
+<meta property="og:description" content="An at-home audiogram for the hearing-curious. Pure-tone threshold testing, tinnitus matcher, noise meter, and trend tracking — entirely in your browser, never sent anywhere." />
+<meta property="og:image" content="https://medassistant-ux.github.io/audiogram/og-image.svg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Audiometry — at-home hearing test and audiogram" />
+<meta property="og:site_name" content="Audiometry" />
+<meta property="og:locale" content="en_US" />
+
+<!-- ============ TWITTER ============ -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://medassistant-ux.github.io/audiogram/" />
+<meta name="twitter:title" content="Free Online Hearing Test &amp; Audiogram" />
+<meta name="twitter:description" content="At-home pure-tone audiometry. Audiogram chart, tinnitus matcher, noise meter, and longitudinal tracking — private, in-browser." />
+<meta name="twitter:image" content="https://medassistant-ux.github.io/audiogram/og-image.svg" />
+
+<!-- ============ STRUCTURED DATA ============ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://medassistant-ux.github.io/audiogram/#app",
+      "name": "Audiometry",
+      "alternateName": "Audiometry — At-home Hearing Test",
+      "url": "https://medassistant-ux.github.io/audiogram/",
+      "description": "A free, browser-based at-home audiometry app. Pure-tone threshold testing, audiogram visualisation, tinnitus matcher, ambient noise meter, and longitudinal tracking — runs entirely on the client, no account required.",
+      "applicationCategory": "HealthApplication",
+      "applicationSubCategory": "Hearing Test",
+      "operatingSystem": "Any (browser)",
+      "browserRequirements": "Modern browser with Web Audio API support",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Pure-tone threshold testing across 250–8000 Hz",
+        "Quick screening (3 min) and full assessment (8 min) modes",
+        "Audiogram visualisation with severity bands",
+        "Pure-tone average (PTA) and severity classification",
+        "Tinnitus frequency and loudness matcher",
+        "Ambient noise meter with NIOSH dose calculation",
+        "Longitudinal history tracking",
+        "Headphone calibration flow",
+        "JSON and PDF export",
+        "Browser notification reminders"
+      ],
+      "isAccessibleForFree": true,
+      "inLanguage": "en"
+    },
+    {
+      "@type": "MedicalWebPage",
+      "@id": "https://medassistant-ux.github.io/audiogram/#page",
+      "url": "https://medassistant-ux.github.io/audiogram/",
+      "name": "Free Online Hearing Test & Audiogram",
+      "headline": "An at-home audiogram for the hearing-curious",
+      "description": "Pure-tone audiometry, tinnitus matcher, and noise meter — privacy-first, browser-based.",
+      "about": [
+        { "@type": "MedicalCondition", "name": "Hearing loss" },
+        { "@type": "MedicalCondition", "name": "Tinnitus" },
+        { "@type": "MedicalCondition", "name": "Noise-induced hearing loss" }
+      ],
+      "audience": {
+        "@type": "PeopleAudience",
+        "suggestedMinAge": 12
+      },
+      "lastReviewed": "2026-05-03",
+      "isPartOf": { "@id": "https://medassistant-ux.github.io/audiogram/#app" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this hearing test accurate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It is a screening estimate, not a diagnosis. Without a calibrated audiometer and sound-treated booth, absolute decibel levels cannot be guaranteed. Use it as a starting point for a professional evaluation, not a substitute for one."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need special equipment?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Closed-back, over-ear headphones in a quiet room. Earbuds will fit poorly and produce inconsistent results. The app guides you through a one-minute calibration step before testing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my data private?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. All audio is generated and analysed on your device using the Web Audio API. Test results are stored only in your browser's localStorage. Nothing is sent to any server. There are no accounts and no tracking."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What frequencies does the test cover?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The full assessment tests 250, 500, 1000, 2000, 3000, 4000, 6000, and 8000 Hz in each ear independently. The quick screening covers 500, 1000, 2000, and 4000 Hz."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When should I see an audiologist?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If your pure-tone average is worse than 25 dB HL, if there is a notable difference between your two ears, if you experience sudden changes in hearing, one-sided tinnitus, ear pain or fullness, persistent dizziness, or difficulty understanding speech in noise."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- ============ FONTS ============ -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Geist:wght@300..700&family=JetBrains+Mono:wght@300..600&display=swap" rel="stylesheet" />
+
+<!-- ============ STYLES ============ -->
 <link rel="stylesheet" href="styles.css" />
+
+<!-- ============ ICONS / MANIFEST ============ -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f3ede1'/%3E%3Cpath d='M2 16 Q 6 8, 10 16 T 18 16 T 26 16 T 30 16' stroke='%2315140f' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23f3ede1'/%3E%3Cpath d='M10 90 Q 32 50, 56 90 T 100 90 T 144 90 T 170 90' stroke='%2315140f' stroke-width='10' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
+<link rel="manifest" href="manifest.json" />
 </head>
 <body>
+
+<noscript>
+  <div style="background:#15140f;color:#f3ede1;padding:24px;text-align:center;font-family:Georgia,serif;">
+    <h1 style="margin:0 0 8px;font-weight:400;">Audiometry — Free Online Hearing Test &amp; Audiogram</h1>
+    <p style="margin:0;">This at-home hearing-test app needs JavaScript to generate audio tones and analyse responses. Please enable JavaScript to run a pure-tone audiogram, the tinnitus matcher, or the ambient noise meter. All audio is generated and analysed locally in your browser — nothing is sent to a server.</p>
+  </div>
+</noscript>
 
 <!-- ============ TOP BAR ============ -->
 <header class="topbar">
@@ -549,5 +696,24 @@
 <div class="toast" id="toast" hidden></div>
 
 <script src="app.js"></script>
+
+<!-- ============ ANALYTICS (GoatCounter) ============
+  Privacy-friendly visit + country tracking. No cookies, no PII, GDPR-safe.
+
+  ONE-TIME SETUP (~30 seconds):
+    1. Go to https://www.goatcounter.com/signup
+    2. Pick a code (e.g. "audiometry") — your dashboard becomes
+       https://YOUR-CODE.goatcounter.com
+    3. Replace YOUR-CODE below with the code you picked, then commit
+    4. Watch live visits and per-country breakdown on your dashboard
+
+  After setup, view stats anytime at https://YOUR-CODE.goatcounter.com
+  You can swap providers (Plausible, Umami, Cloudflare, GA4) by
+  replacing this script block — see commit history for examples.
+====================================================== -->
+<script
+  data-goatcounter="https://audiometry.goatcounter.com/count"
+  async src="//gc.zgo.at/count.js"></script>
+
 </body>
 </html>
