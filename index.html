@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Audiometry — At-home hearing assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Geist:wght@300..700&family=JetBrains+Mono:wght@300..600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="#home" data-route="home" class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="22" height="22"><path d="M2 16 Q 6 8, 10 16 T 18 16 T 26 16 T 30 16" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+      </span>
+      <span class="brand-name">Audiometry</span>
+      <span class="brand-tag">No.&nbsp;01</span>
+    </a>
+    <nav class="topnav">
+      <a href="#home" data-route="home">Dashboard</a>
+      <a href="#test" data-route="test">Assessment</a>
+      <a href="#history" data-route="history">History</a>
+      <a href="#tinnitus" data-route="tinnitus">Tinnitus</a>
+      <a href="#noise" data-route="noise">Noise</a>
+      <a href="#learn" data-route="learn">Learn</a>
+    </nav>
+    <div class="topbar-meta">
+      <span class="meta-dot" id="audio-status" title="Audio engine status"></span>
+      <span class="mono" id="profile-name">Guest</span>
+    </div>
+  </div>
+  <div class="topbar-rule"></div>
+</header>
+
+<main id="app">
+
+<!-- ============ HOME ============ -->
+<section class="view view-home" data-view="home">
+  <div class="grid-12">
+    <div class="hero col-span-12">
+      <p class="eyebrow">An at-home audiogram for the hearing-curious</p>
+      <h1 class="display">
+        <span class="kerned">Listen</span>
+        <em class="serif-italic">carefully.</em>
+      </h1>
+      <p class="hero-lede">
+        A pure-tone threshold test, a tinnitus matcher, an ambient-noise meter, and a longitudinal record of your hearing — calibrated against your own headphones, kept private on your device.
+      </p>
+      <div class="hero-cta">
+        <button class="btn btn-primary" data-action="start-assessment">Begin assessment <span aria-hidden="true">→</span></button>
+        <button class="btn btn-ghost" data-route="learn">How it works</button>
+      </div>
+      <p class="hero-disclaimer">
+        Not a medical device. A screening tool to inform conversations with a licensed audiologist.
+      </p>
+    </div>
+
+    <div class="card card-summary col-span-7">
+      <div class="card-head">
+        <span class="eyebrow">Latest assessment</span>
+        <span class="mono dim" id="latest-date">—</span>
+      </div>
+      <div class="summary-grid" id="latest-summary">
+        <!-- filled by JS -->
+        <div class="summary-empty">
+          <p class="serif-italic">No assessments yet.</p>
+          <p class="dim">Your audiograms and trends will appear here once you complete your first test.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-actions col-span-5">
+      <h3 class="card-title">Quick actions</h3>
+      <ul class="action-list">
+        <li><button data-action="calibrate"><span>Calibrate headphones</span><span class="mono dim">§ 01</span></button></li>
+        <li><button data-action="quick-test"><span>Quick screening (3 min)</span><span class="mono dim">§ 02</span></button></li>
+        <li><button data-action="full-test"><span>Full assessment (8 min)</span><span class="mono dim">§ 03</span></button></li>
+        <li><button data-route="tinnitus"><span>Tinnitus frequency match</span><span class="mono dim">§ 04</span></button></li>
+        <li><button data-route="noise"><span>Ambient noise meter</span><span class="mono dim">§ 05</span></button></li>
+        <li><button data-action="reminder"><span>Schedule retest reminder</span><span class="mono dim">§ 06</span></button></li>
+      </ul>
+    </div>
+
+    <div class="card card-trend col-span-12">
+      <div class="card-head">
+        <h3 class="card-title">Trend — pure-tone average</h3>
+        <span class="mono dim">last 12 tests</span>
+      </div>
+      <div class="trend-wrap">
+        <svg id="trend-chart" viewBox="0 0 800 180" preserveAspectRatio="none" aria-hidden="true"></svg>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="swatch swatch-right"></span> Right ear</span>
+        <span class="legend-item"><span class="swatch swatch-left"></span> Left ear</span>
+        <span class="legend-item dim mono">▼ lower is better</span>
+      </div>
+    </div>
+
+    <aside class="card card-tip col-span-12">
+      <span class="eyebrow">Bulletin</span>
+      <p class="tip-text serif-italic" id="tip-text">
+        Sustained exposure above 85 dBA (busy traffic, a loud restaurant) accumulates damage. Eight hours at that level reaches the daily noise dose.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ CALIBRATE ============ -->
+<section class="view view-calibrate" data-view="calibrate" hidden>
+  <div class="grid-12">
+    <div class="col-span-12">
+      <p class="eyebrow">§ 01 · Calibration</p>
+      <h2 class="page-title">A reference, set by you.</h2>
+      <p class="prose">
+        Consumer headphones are not laboratory transducers. Before each session we ask you to anchor a single reference tone to a level that <em>just-barely-but-clearly</em> sounds like quiet conversation. From this anchor we estimate hearing levels in decibels relative to typical normal hearing (dB HL).
+      </p>
+    </div>
+
+    <div class="card col-span-7 cal-panel">
+      <div class="cal-step" data-step="1">
+        <span class="mono dim">Step 1 of 3</span>
+        <h3 class="card-title">Headphone check</h3>
+        <p class="prose">Wear your headphones the right way around. We will play short tones in each ear so you can verify left and right are correctly placed.</p>
+        <div class="cal-actions">
+          <button class="btn btn-secondary" data-cal="play-left">▶ Play in <strong>left</strong></button>
+          <button class="btn btn-secondary" data-cal="play-right">▶ Play in <strong>right</strong></button>
+        </div>
+        <div class="cal-confirm">
+          <label><input type="checkbox" id="cal-channels-confirm" /> I heard each tone in the correct ear.</label>
+        </div>
+      </div>
+
+      <div class="cal-step" data-step="2">
+        <span class="mono dim">Step 2 of 3</span>
+        <h3 class="card-title">Find a quiet room</h3>
+        <p class="prose">No fans, no music, no conversation. The quieter your environment, the more accurate the threshold.</p>
+        <button class="btn btn-secondary" data-cal="measure-noise">Measure ambient noise</button>
+        <p class="cal-noise-readout mono" id="cal-noise-readout">—</p>
+      </div>
+
+      <div class="cal-step" data-step="3">
+        <span class="mono dim">Step 3 of 3</span>
+        <h3 class="card-title">Anchor the reference tone</h3>
+        <p class="prose">A pulsed 1&nbsp;kHz tone will play in both ears. Adjust your <strong>system volume</strong> until the tone sounds like <em>quiet conversation, one room away</em> — present, but unobtrusive. Then confirm.</p>
+        <div class="cal-actions">
+          <button class="btn btn-secondary" data-cal="play-reference">▶ Play reference</button>
+          <button class="btn btn-secondary" data-cal="stop-reference">■ Stop</button>
+        </div>
+        <div class="cal-slider">
+          <label class="mono dim" for="cal-trim">Fine trim (within-app)</label>
+          <input type="range" id="cal-trim" min="-12" max="12" step="0.5" value="0" />
+          <span class="mono" id="cal-trim-readout">0.0 dB</span>
+        </div>
+      </div>
+
+      <div class="cal-finish">
+        <button class="btn btn-primary" data-cal="save">Save calibration</button>
+      </div>
+    </div>
+
+    <aside class="card col-span-5 cal-side">
+      <h3 class="card-title">Why this matters</h3>
+      <p class="prose dim">
+        A clinical audiometer is calibrated annually to ISO 389 reference levels using couplers and artificial ears. That precision is impossible at home. What we can do is fix a single anchor — your perception of conversational loudness — and measure thresholds <em>relative</em> to it.
+      </p>
+      <hr class="hairline" />
+      <h4 class="micro-title">Best practices</h4>
+      <ul class="checklist">
+        <li>Closed-back, over-ear headphones</li>
+        <li>Disable any audio enhancements / equalisers</li>
+        <li>Set system balance to perfect centre</li>
+        <li>Hard mute notifications</li>
+        <li>Re-calibrate if you change devices</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ TEST ============ -->
+<section class="view view-test" data-view="test" hidden>
+  <div class="test-stage" id="test-stage">
+    <header class="test-meta">
+      <div>
+        <span class="eyebrow" id="test-mode-label">Pure-tone threshold</span>
+        <h2 class="page-title small" id="test-ear-label">Right ear</h2>
+      </div>
+      <div class="test-progress">
+        <span class="mono dim" id="test-counter">— / —</span>
+        <div class="progress-track"><div class="progress-fill" id="test-progress"></div></div>
+      </div>
+    </header>
+
+    <div class="test-pane">
+      <div class="freq-display">
+        <span class="freq-number" id="freq-number">1000</span>
+        <span class="freq-unit">Hz</span>
+        <span class="freq-tick" id="freq-region">mid frequencies</span>
+      </div>
+
+      <div class="tone-vis" id="tone-vis" aria-hidden="true">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+      </div>
+
+      <button class="btn btn-hear" id="btn-hear">
+        <span class="hear-label">I hear a tone</span>
+        <span class="hear-key mono">SPACE</span>
+      </button>
+
+      <p class="test-help dim">A tone may or may not play. Press only when you hear one — even faintly.</p>
+
+      <div class="test-controls">
+        <button class="btn btn-text" id="btn-skip">Skip frequency</button>
+        <button class="btn btn-text" id="btn-pause">Pause</button>
+        <button class="btn btn-text" id="btn-abort">Stop test</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pre-test gate -->
+  <div class="test-gate" id="test-gate">
+    <div class="gate-card">
+      <p class="eyebrow">Before we begin</p>
+      <h2 class="page-title">A few conditions, briefly.</h2>
+      <ul class="gate-list">
+        <li><span class="mono">i</span> The room must be quiet. Close windows and doors.</li>
+        <li><span class="mono">ii</span> Wear over-ear headphones. Earbuds will fit poorly.</li>
+        <li><span class="mono">iii</span> Calibration must be current. <button class="link" data-route="calibrate">Re-calibrate</button>.</li>
+        <li><span class="mono">iv</span> Avoid testing right after loud-noise exposure (give your ears 12 hours).</li>
+        <li><span class="mono">v</span> Press the response button at the <em>faintest</em> perception, not when comfortable.</li>
+      </ul>
+      <div class="gate-actions">
+        <button class="btn btn-primary" id="btn-gate-start">Start test</button>
+        <button class="btn btn-ghost" data-route="home">Cancel</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section class="view view-results" data-view="results" hidden>
+  <div class="grid-12">
+    <div class="col-span-12 results-head">
+      <p class="eyebrow">Assessment results</p>
+      <h2 class="page-title"><span id="results-title">Your audiogram</span></h2>
+      <p class="prose dim mono" id="results-date">—</p>
+    </div>
+
+    <div class="card col-span-8 audiogram-card">
+      <div class="audiogram-wrap">
+        <svg id="audiogram" viewBox="0 0 720 520" role="img" aria-label="Audiogram"></svg>
+      </div>
+      <div class="audiogram-legend">
+        <div><span class="symbol symbol-right">○</span> Right ear (air conduction)</div>
+        <div><span class="symbol symbol-left">×</span> Left ear (air conduction)</div>
+        <div class="dim mono">↓ louder · ↑ quieter</div>
+      </div>
+    </div>
+
+    <div class="card col-span-4 interpret-card">
+      <h3 class="card-title">Interpretation</h3>
+      <div class="pta-grid">
+        <div class="pta-row">
+          <span class="dim mono">PTA · Right</span>
+          <span class="pta-value" id="pta-right">—</span>
+          <span class="pta-class" id="class-right">—</span>
+        </div>
+        <div class="pta-row">
+          <span class="dim mono">PTA · Left</span>
+          <span class="pta-value" id="pta-left">—</span>
+          <span class="pta-class" id="class-left">—</span>
+        </div>
+        <div class="pta-row asymmetry">
+          <span class="dim mono">Asymmetry</span>
+          <span class="pta-value" id="asym-value">—</span>
+        </div>
+      </div>
+
+      <hr class="hairline" />
+      <h4 class="micro-title">Plain language</h4>
+      <p class="prose" id="plain-text">—</p>
+
+      <hr class="hairline" />
+      <h4 class="micro-title">Suggested next steps</h4>
+      <ul class="next-list" id="next-steps"></ul>
+
+      <div class="results-actions">
+        <button class="btn btn-secondary" id="btn-export-pdf">Print / Save as PDF</button>
+        <button class="btn btn-secondary" id="btn-export-json">Export JSON</button>
+        <button class="btn btn-secondary" id="btn-share">Copy summary</button>
+        <button class="btn btn-ghost" id="btn-retest">Run again</button>
+      </div>
+    </div>
+
+    <div class="card col-span-12 banding-card">
+      <h3 class="card-title">Severity bands</h3>
+      <div class="bands">
+        <div class="band band-normal"><span class="mono">−10 to 25</span><span>Normal</span></div>
+        <div class="band band-mild"><span class="mono">26 — 40</span><span>Mild loss</span></div>
+        <div class="band band-mod"><span class="mono">41 — 55</span><span>Moderate</span></div>
+        <div class="band band-modsev"><span class="mono">56 — 70</span><span>Mod.&nbsp;severe</span></div>
+        <div class="band band-sev"><span class="mono">71 — 90</span><span>Severe</span></div>
+        <div class="band band-prof"><span class="mono">91 +</span><span>Profound</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HISTORY ============ -->
+<section class="view view-history" data-view="history" hidden>
+  <div class="grid-12">
+    <div class="col-span-12">
+      <p class="eyebrow">Longitudinal record</p>
+      <h2 class="page-title">History</h2>
+    </div>
+    <div class="card col-span-12">
+      <div class="history-controls">
+        <span class="dim mono" id="history-count">—</span>
+        <div>
+          <button class="btn btn-secondary btn-small" id="btn-export-all">Export all</button>
+          <button class="btn btn-text btn-small" id="btn-clear">Clear history</button>
+        </div>
+      </div>
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th class="mono dim">Date</th>
+            <th class="mono dim">Mode</th>
+            <th class="mono dim">PTA R</th>
+            <th class="mono dim">PTA L</th>
+            <th class="mono dim">Class R</th>
+            <th class="mono dim">Class L</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody"></tbody>
+      </table>
+    </div>
+    <div class="card col-span-12">
+      <h3 class="card-title">Per-frequency trend</h3>
+      <p class="prose dim">Track each frequency over time. A widening gap on the right side of the chart often signals early noise-induced loss.</p>
+      <div class="trend-wrap">
+        <svg id="trend-detailed" viewBox="0 0 1000 320" preserveAspectRatio="none" aria-hidden="true"></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TINNITUS ============ -->
+<section class="view view-tinnitus" data-view="tinnitus" hidden>
+  <div class="grid-12">
+    <div class="col-span-12">
+      <p class="eyebrow">§ 04 · Tinnitus</p>
+      <h2 class="page-title">Match the ringing.</h2>
+      <p class="prose">
+        Sweep through pure tones and narrowband noise to find the pitch and loudness that most closely match what you hear. Match values, when tracked over time, can help an audiologist tailor sound therapy.
+      </p>
+    </div>
+
+    <div class="card col-span-7">
+      <div class="tin-control-row">
+        <label class="mono dim">Stimulus</label>
+        <div class="seg">
+          <button data-tin-type="sine" class="active">Pure tone</button>
+          <button data-tin-type="noise">Narrowband noise</button>
+        </div>
+      </div>
+      <div class="tin-control-row">
+        <label class="mono dim">Frequency</label>
+        <input type="range" id="tin-freq" min="125" max="14000" step="1" value="6000" />
+        <span class="mono" id="tin-freq-readout">6000 Hz</span>
+      </div>
+      <div class="tin-control-row">
+        <label class="mono dim">Loudness</label>
+        <input type="range" id="tin-level" min="-60" max="0" step="1" value="-30" />
+        <span class="mono" id="tin-level-readout">−30 dB</span>
+      </div>
+      <div class="tin-control-row">
+        <label class="mono dim">Side</label>
+        <div class="seg">
+          <button data-tin-side="both" class="active">Both</button>
+          <button data-tin-side="left">Left</button>
+          <button data-tin-side="right">Right</button>
+        </div>
+      </div>
+      <div class="tin-actions">
+        <button class="btn btn-primary" id="tin-play">▶ Play / Stop</button>
+        <button class="btn btn-secondary" id="tin-save">Save match</button>
+      </div>
+    </div>
+
+    <aside class="card col-span-5">
+      <h3 class="card-title">Saved matches</h3>
+      <ul class="match-list" id="tin-matches"></ul>
+      <hr class="hairline" />
+      <h4 class="micro-title">When to seek help</h4>
+      <ul class="checklist">
+        <li>Sudden onset of tinnitus in one ear</li>
+        <li>Tinnitus accompanied by hearing loss or vertigo</li>
+        <li>Pulsatile tinnitus (rhythmic, in time with heartbeat)</li>
+        <li>Tinnitus that significantly disrupts sleep or focus</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ NOISE METER ============ -->
+<section class="view view-noise" data-view="noise" hidden>
+  <div class="grid-12">
+    <div class="col-span-12">
+      <p class="eyebrow">§ 05 · Sound exposure</p>
+      <h2 class="page-title">Ambient noise meter.</h2>
+      <p class="prose">
+        Uses your microphone to estimate sound pressure level. Approximate, uncalibrated, and entirely private — audio never leaves the page. Useful for spotting <em>relatively</em> loud environments and tracking your daily noise dose.
+      </p>
+    </div>
+
+    <div class="card col-span-7 meter-card">
+      <div class="meter-display">
+        <span class="meter-value mono" id="meter-value">—</span>
+        <span class="meter-unit">dB SPL · approx</span>
+      </div>
+      <div class="meter-bar"><div class="meter-bar-fill" id="meter-bar-fill"></div></div>
+      <div class="meter-stats">
+        <div><span class="dim mono">Peak</span><span class="mono" id="meter-peak">—</span></div>
+        <div><span class="dim mono">Avg (Leq)</span><span class="mono" id="meter-leq">—</span></div>
+        <div><span class="dim mono">Duration</span><span class="mono" id="meter-dur">00:00</span></div>
+        <div><span class="dim mono">Daily dose</span><span class="mono" id="meter-dose">0%</span></div>
+      </div>
+      <div class="meter-actions">
+        <button class="btn btn-primary" id="meter-toggle">Start measuring</button>
+        <button class="btn btn-secondary" id="meter-reset">Reset</button>
+      </div>
+    </div>
+
+    <aside class="card col-span-5">
+      <h3 class="card-title">Reference levels</h3>
+      <ul class="ref-list">
+        <li><span class="mono">30 dB</span><span>Whisper, library</span></li>
+        <li><span class="mono">60 dB</span><span>Conversation</span></li>
+        <li><span class="mono">75 dB</span><span>Vacuum cleaner</span></li>
+        <li><span class="mono">85 dB</span><span class="warn">8h damage threshold</span></li>
+        <li><span class="mono">95 dB</span><span class="warn">Motorcycle, max 50 min/day</span></li>
+        <li><span class="mono">110 dB</span><span class="danger">Concert, max 1 min 29 s</span></li>
+        <li><span class="mono">120 dB</span><span class="danger">Pain threshold</span></li>
+      </ul>
+      <hr class="hairline" />
+      <p class="prose dim">
+        Daily noise dose follows the NIOSH 3-dB exchange rate: every 3 dB increase halves the safe exposure time. 100% dose corresponds to roughly 85 dBA over 8 hours.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ LEARN ============ -->
+<section class="view view-learn" data-view="learn" hidden>
+  <div class="grid-12">
+    <div class="col-span-12">
+      <p class="eyebrow">Reference</p>
+      <h2 class="page-title">A short field guide.</h2>
+    </div>
+
+    <article class="card col-span-6 learn-article">
+      <h3 class="card-title">How the test works</h3>
+      <p class="prose">
+        We use a modified ascending–descending threshold method, presenting pure tones at calibrated frequencies — 250, 500, 1000, 2000, 3000, 4000, 6000, 8000 Hz — to each ear independently. Tones are randomised in timing to discourage anticipation. Your threshold at each frequency is the lowest level you reliably detect.
+      </p>
+      <p class="prose">
+        Pure-tone average (PTA) is the mean of thresholds at 500, 1000, and 2000 Hz — the speech-critical band. PTA underpins the loss-severity classifications used worldwide.
+      </p>
+    </article>
+
+    <article class="card col-span-6 learn-article">
+      <h3 class="card-title">Reading an audiogram</h3>
+      <p class="prose">
+        Frequency runs across the X-axis on a log scale (low pitches left, high pitches right). Hearing level runs down the Y-axis from 0 dB HL at the top to 110+ at the bottom — so a steeper drop on the chart means worse hearing. Right-ear thresholds are marked with red circles; left-ear thresholds with blue crosses.
+      </p>
+      <p class="prose">
+        A "ski-slope" pattern — normal hearing in the lows, sharply diminished in the highs — is the classic signature of noise-induced loss, often beginning at 4 kHz.
+      </p>
+    </article>
+
+    <article class="card col-span-6 learn-article">
+      <h3 class="card-title">When to see a professional</h3>
+      <ul class="checklist">
+        <li>Any sudden change in hearing</li>
+        <li>One-sided hearing loss or tinnitus</li>
+        <li>PTA worse than 25 dB HL on this screening</li>
+        <li>Difficulty understanding speech in noise despite normal pure-tone thresholds</li>
+        <li>Pain, fullness, or persistent dizziness</li>
+        <li>Family history of progressive hearing loss</li>
+      </ul>
+    </article>
+
+    <article class="card col-span-6 learn-article">
+      <h3 class="card-title">Protecting what you have</h3>
+      <ul class="checklist">
+        <li>The 60/60 rule — under 60% volume, under 60 minutes at a time</li>
+        <li>Custom-moulded musician's earplugs preserve frequency balance</li>
+        <li>Step out of loud environments every 30 minutes for a quiet minute</li>
+        <li>Avoid testing your headphones with someone else's volume settings</li>
+        <li>Hearing loss is cumulative; days of recovery do not erase hours of damage</li>
+      </ul>
+    </article>
+
+    <article class="card col-span-12 learn-article disclaimer">
+      <h3 class="card-title">Limitations of at-home testing</h3>
+      <p class="prose">
+        This tool produces a screening estimate, not a diagnosis. Without a calibrated audiometer, sound-treated booth, and bone-conduction transducer, we cannot distinguish conductive loss (middle-ear) from sensorineural loss (cochlear/neural), cannot measure tympanic compliance, and cannot rule out retrocochlear pathology. Treat all results as a starting point for a professional evaluation, not a substitute for one.
+      </p>
+    </article>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      <span class="brand-name">Audiometry</span>
+      <span class="dim mono"> · v 0.1 · local-only · no accounts</span>
+    </div>
+    <div class="dim mono">
+      <span>Pressed by you, on your machine.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ MODAL ============ -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-backdrop" data-modal-close></div>
+  <div class="modal-card">
+    <button class="modal-x" data-modal-close aria-label="Close">×</button>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
