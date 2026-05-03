@@ -366,7 +366,7 @@ const Test = {
     $('#test-counter').textContent = `${t.idx} / ${t.total}`;
     $('#test-progress').style.width = (t.idx / t.total * 100) + '%';
     $('#freq-number').textContent = t.curFreq;
-    $('#freq-region').textContent = freqRegionLabel(t.curFreq);
+    $('#freq-region').textContent = `${freqRegionLabel(t.curFreq)} · trial ${t.trials || 0}`;
     const earEl = $('#test-ear-label');
     earEl.textContent = t.curEar === 'right' ? 'Right ear' : 'Left ear';
     earEl.classList.toggle('test-ear-right', t.curEar === 'right');
@@ -377,18 +377,19 @@ const Test = {
     const t = state.test;
     t.curEar = ear;
     t.curFreq = freq;
-    t.curLevel = 40;
+    /* Start at a comfortable level so the user hears the first tone
+       and the test feels responsive, then descend rapidly. */
+    t.curLevel = 60;
     t.reversals = [];
     t.lastDirection = null;
     t.trials = 0;
     this.updateProgress();
 
-    /* familiarisation: ascend until heard, starting at 40 */
-    let level = 40;
+    let level = 60;
     let lastHeard = null;
     let direction = null;
 
-    const maxTrials = 30;
+    const maxTrials = 14;
     while (t.trials < maxTrials && !t.cancel) {
       while (t.paused && !t.cancel) await sleep(150);
       if (t.cancel) return null;
@@ -396,6 +397,7 @@ const Test = {
       level = Math.max(HL_MIN, Math.min(HL_MAX, level));
       t.curLevel = level;
       t.trials++;
+      this.updateProgress();
 
       const heard = await this.presentTrial(ear, freq, level);
       if (t.cancel) return null;
@@ -408,15 +410,11 @@ const Test = {
 
       if (heard) lastHeard = level;
 
-      /* termination */
-      if (t.reversals.length >= 4) break;
+      /* Two reversals is enough for a screening estimate. */
+      if (t.reversals.length >= 2) break;
 
-      /* step rules */
-      if (heard) {
-        level -= 10;
-      } else {
-        level += 5;
-      }
+      if (heard) level -= 10;
+      else       level += 5;
 
       if (level < HL_MIN || level > HL_MAX) break;
     }
@@ -430,31 +428,49 @@ const Test = {
 
   async presentTrial(ear, freq, level) {
     const t = state.test;
-    /* random pre-tone delay 1.0–2.5s */
-    await sleep(rand(1000, 2500));
+    const setState = (txt, cls = '') => {
+      const el = $('#test-state');
+      if (el) { el.textContent = txt; el.className = 'test-state mono ' + cls; }
+    };
+
+    setState('— listening —', '');
+    /* short random pre-tone gap 700–1600ms */
+    await sleep(rand(700, 1600));
     if (t.cancel) return false;
 
     t.heardThisTone = false;
     const vis = $('#tone-vis');
     vis.classList.add('playing');
-    const toneDur = 1100;
+    setState(`▼ tone · ${level} dB HL`, 'tone');
+    const toneDur = 900;
     const tone = Audio.playTone({ freq, dbHL: level, durationMs: toneDur, ear });
     t.lastTone = tone;
+    console.log('[audiometry] tone', { ear, freq, level });
 
-    /* response window = tone duration + 1500ms grace */
-    await sleep(toneDur + 1500);
+    /* response window = tone duration + 1200ms grace */
+    await sleep(toneDur);
+    setState('— response window —', 'window');
+    await sleep(1200);
     vis.classList.remove('playing');
+    if (t.heardThisTone) setState('✓ heard', 'heard');
+    else setState('— no response —', '');
+    await sleep(450);
     return t.heardThisTone;
   },
 
   reportResponse() {
     const t = state.test;
     if (!t) return;
-    if (t.lastTone && Audio.ctx && Audio.ctx.currentTime <= t.lastTone.endsAt + 1.5) {
-      t.heardThisTone = true;
-      const btn = $('#btn-hear');
+    /* Always flash so the user sees their input was registered, even
+       outside the response window. Only count as "heard" if a tone is
+       currently within its response window. */
+    const btn = $('#btn-hear');
+    if (btn) {
       btn.classList.add('flash');
       setTimeout(() => btn.classList.remove('flash'), 240);
+    }
+    if (t.lastTone && Audio.ctx && Audio.ctx.currentTime <= t.lastTone.endsAt + 1.2) {
+      t.heardThisTone = true;
     }
   },
 

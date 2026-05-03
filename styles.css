@@ -766,6 +766,19 @@ main#app {
   color: var(--ink-faint);
 }
 
+.test-state {
+  margin: 8px 0 24px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  min-height: 18px;
+  transition: color 0.2s var(--ease);
+}
+.test-state.tone   { color: var(--signal); }
+.test-state.window { color: var(--ink); }
+.test-state.heard  { color: var(--right); }
+
 .test-controls {
   margin-top: 56px;
   display: flex; gap: 40px;
