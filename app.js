@@ -1511,13 +1511,27 @@ function copySummary(session) {
 
 /* ---------- Boot ---------- */
 function boot() {
-  Storage.load();
-  wire();
-  Router.init();
-  checkReminderDue();
+  try {
+    console.log('[audiometry] boot');
+    Storage.load();
+    wire();
+    Router.init();
+    checkReminderDue();
+    console.log('[audiometry] ready');
+  } catch (err) {
+    console.error('[audiometry] boot failed:', err);
+    /* Surface the error so the page isn't silently broken */
+    const t = document.querySelector('#toast');
+    if (t) { t.textContent = 'Boot error — see console'; t.hidden = false; }
+  }
 }
 
-document.addEventListener('DOMContentLoaded', boot);
+/* Script is at end of body, so DOM is ready. Run immediately. */
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  boot();
+}
 
 /* expose for debugging */
 window.__audiometry = { state, Storage, Test, Audio, NoiseMeter };
